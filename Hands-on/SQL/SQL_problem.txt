@@ -1,0 +1,173 @@
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 8.0.31 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database Rajadb;
+ERROR 1007 (HY000): Can't create database 'rajadb'; database exists
+mysql> show database;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'database' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| rajadb             |
+| sys                |
++--------------------+
+5 rows in set (0.17 sec)
+
+mysql> use Rajadb;
+Database changed
+mysql> create table country(
+    -> country_id int not null,
+    -> country_name varchar(20) not null,
+    -> region_id int not null,
+    -> primary key(country_id,region_id)
+    -> );
+Query OK, 0 rows affected (0.26 sec)
+
+mysql> desc country;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| country_id   | int         | NO   | PRI | NULL    |       |
+| country_name | varchar(20) | NO   |     | NULL    |       |
+| region_id    | int         | NO   | PRI | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.04 sec)
+
+mysql> insert into country(country_id,country_name,region_id)values
+    -> (105,India,211),
+    -> (106,Germany,215),
+    -> (108,France,220),
+    -> (109,USA,225),
+    -> (110,London,230);
+ERROR 1054 (42S22): Unknown column 'India' in 'field list'
+mysql> insert into country(country_id,country_name,region_id)values
+    -> (105,'India',211),
+    -> (106,'Germany',215),
+    -> (108,'France',220),
+    -> (109,'USA',225),
+    -> (110,'London',230);
+Query OK, 5 rows affected (0.03 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from country;
++------------+--------------+-----------+
+| country_id | country_name | region_id |
++------------+--------------+-----------+
+|        105 | India        |       211 |
+|        106 | Germany      |       215 |
+|        108 | France       |       220 |
+|        109 | USA          |       225 |
+|        110 | London       |       230 |
++------------+--------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> alter table country add region_name varchar(20) not null;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from country;
++------------+--------------+-----------+-------------+
+| country_id | country_name | region_id | region_name |
++------------+--------------+-----------+-------------+
+|        105 | India        |       211 |             |
+|        106 | Germany      |       215 |             |
+|        108 | France       |       220 |             |
+|        109 | USA          |       225 |             |
+|        110 | London       |       230 |             |
++------------+--------------+-----------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into country(region_name)values
+    -> ('Mumbai');
+ERROR 1364 (HY000): Field 'country_id' doesn't have a default value
+mysql> update country set region_name='Mumbai' where country_id=105;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update country set region_name='Lanu' where country_id=106;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update country set region_name='Seso' where country_id=108;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update country set region_name='Henauro' where country_id=109;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update country set region_name='Angula' where country_id=110;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from country;
++------------+--------------+-----------+-------------+
+| country_id | country_name | region_id | region_name |
++------------+--------------+-----------+-------------+
+|        105 | India        |       211 | Mumbai      |
+|        106 | Germany      |       215 | Lanu        |
+|        108 | France       |       220 | Seso        |
+|        109 | USA          |       225 | Henauro     |
+|        110 | London       |       230 | Angula      |
++------------+--------------+-----------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> alter table country modify region_name varchar(40) not null;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table country drop column region_id;
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from country;
++------------+--------------+-------------+
+| country_id | country_name | region_name |
++------------+--------------+-------------+
+|        105 | India        | Mumbai      |
+|        106 | Germany      | Lanu        |
+|        108 | France       | Seso        |
+|        109 | USA          | Henauro     |
+|        110 | London       | Angula      |
++------------+--------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> delete from country where country_id=109;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from country;
++------------+--------------+-------------+
+| country_id | country_name | region_name |
++------------+--------------+-------------+
+|        105 | India        | Mumbai      |
+|        106 | Germany      | Lanu        |
+|        108 | France       | Seso        |
+|        110 | London       | Angula      |
++------------+--------------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> delete from country;
+Query OK, 4 rows affected (0.01 sec)
+
+mysql> select * from country;
+Empty set (0.00 sec)
+
+mysql> drop table country;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from country;
+ERROR 1146 (42S02): Table 'rajadb.country' doesn't exist
+mysql>
