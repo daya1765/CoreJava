@@ -1,0 +1,239 @@
+problem - an example to show the working of  join:
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 21
+Server version: 8.0.31 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| rajadb             |
+| sys                |
++--------------------+
+5 rows in set (0.12 sec)
+
+mysql> show tables;
+ERROR 1046 (3D000): No database selected
+mysql> use Rajadb;
+Database changed
+mysql> show tables;
+Empty set (0.11 sec)
+
+mysql> create table Employee(
+    -> emp_id int not null,
+    -> emp_name varchar(30) not null ,
+    -> emp_no bigint not null,
+    -> primary key(emp_id)
+    -> );
+Query OK, 0 rows affected (0.37 sec)
+
+mysql> insert into Employee(emp_id,emp_name,emp_no)values
+    -> (101,'Asha',8972861254),
+    -> (103,'Subha',7823777620),
+    -> (104,'Raju',9627180028);
+Query OK, 3 rows affected (0.12 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> insert int Employee values
+    -> (105,'Sanju',7391300271),
+    -> (106,'Priya',9837201893);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int Employee values
+(105,'Sanju',7391300271),
+(106,'Priya',9837201893)' at line 1
+mysql> insert int Employee values
+    -> (105,'Sanju',7391300271);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int Employee values
+(105,'Sanju',7391300271)' at line 1
+mysql> select * from Employee;
++--------+----------+------------+
+| emp_id | emp_name | emp_no     |
++--------+----------+------------+
+|    101 | Asha     | 8972861254 |
+|    103 | Subha    | 7823777620 |
+|    104 | Raju     | 9627180028 |
++--------+----------+------------+
+3 rows in set (0.02 sec)
+
+mysql> insert into Employee values(105,'Priya',9837221000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Employee values(106,'Shailja',9837221820);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from Employee;
++--------+----------+------------+
+| emp_id | emp_name | emp_no     |
++--------+----------+------------+
+|    101 | Asha     | 8972861254 |
+|    103 | Subha    | 7823777620 |
+|    104 | Raju     | 9627180028 |
+|    105 | Priya    | 9837221000 |
+|    106 | Shailja  | 9837221820 |
++--------+----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> create table Employment(
+    -> emp_id int not null,
+    -> emp_profile varchar(30) not null,
+    -> emp_country varchar(20) not null,
+    -> primary key(emp_id)
+    -> );
+Query OK, 0 rows affected (0.14 sec)
+
+mysql> insert into Employment(emp_id,emp_profile,emp_country)values
+    -> (101,'content writer',Germany),
+    -> (104,'data analyst','India');
+ERROR 1054 (42S22): Unknown column 'Germany' in 'field list'
+mysql> insert into Employment(emp_id,emp_profile,emp_country)values
+    -> (101,'content writer','Germany'),
+    -> (104,'data analyst','India'),
+    -> (105,'software engineer','India'),
+    -> (108,'java developer','Europe'),
+    -> (109,'marketing manager','Mexico');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from Employment;
++--------+-------------------+-------------+
+| emp_id | emp_profile       | emp_country |
++--------+-------------------+-------------+
+|    101 | content writer    | Germany     |
+|    104 | data analyst      | India       |
+|    105 | software engineer | India       |
+|    108 | java developer    | Europe      |
+|    109 | marketing manager | Mexico      |
++--------+-------------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select Employee.emp_name,Employee.emp_no,Employment.emp_profile,Employment.emp_country
+    -> from Employee INNER JOIN Employment On Employee.emp_id=Employment.emp_id;
++----------+------------+-------------------+-------------+
+| emp_name | emp_no     | emp_profile       | emp_country |
++----------+------------+-------------------+-------------+
+| Asha     | 8972861254 | content writer    | Germany     |
+| Raju     | 9627180028 | data analyst      | India       |
+| Priya    | 9837221000 | software engineer | India       |
++----------+------------+-------------------+-------------+
+3 rows in set (0.01 sec)
+
+mysql> select * from  from Employee INNER JOIN Employment On Employee.emp_id=Employment.emp_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from Employee INNER JOIN Employment On Employee.emp_id=Employment.emp_id' at line 1
+mysql> select * from  Employee INNER JOIN Employment On Employee.emp_id=Employment.emp_id;
++--------+----------+------------+--------+-------------------+-------------+
+| emp_id | emp_name | emp_no     | emp_id | emp_profile       | emp_country |
++--------+----------+------------+--------+-------------------+-------------+
+|    101 | Asha     | 8972861254 |    101 | content writer    | Germany     |
+|    104 | Raju     | 9627180028 |    104 | data analyst      | India       |
+|    105 | Priya    | 9837221000 |    105 | software engineer | India       |
++--------+----------+------------+--------+-------------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select Employee.emp_name,Employee.emp_no,Employment.emp_profile,Employment.emp_country
+    -> from  from Employee LEFT JOIN Employment On Employee.emp_id=Employment.emp_id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from Employee LEFT JOIN Employment On Employee.emp_id=Employment.emp_id' at line 2
+mysql> select Employee.emp_name,Employee.emp_no,Employment.emp_profile,Employment.emp_country
+    -> from Employee LEFT JOIN Employment On Employee.emp_id=Employment.emp_id;
++----------+------------+-------------------+-------------+
+| emp_name | emp_no     | emp_profile       | emp_country |
++----------+------------+-------------------+-------------+
+| Asha     | 8972861254 | content writer    | Germany     |
+| Subha    | 7823777620 | NULL              | NULL        |
+| Raju     | 9627180028 | data analyst      | India       |
+| Priya    | 9837221000 | software engineer | India       |
+| Shailja  | 9837221820 | NULL              | NULL        |
++----------+------------+-------------------+-------------+
+5 rows in set (0.01 sec)
+
+mysql> select * from Employee LEFT JOIN Employment On Employee.emp_id=Employment.emp_id;
++--------+----------+------------+--------+-------------------+-------------+
+| emp_id | emp_name | emp_no     | emp_id | emp_profile       | emp_country |
++--------+----------+------------+--------+-------------------+-------------+
+|    101 | Asha     | 8972861254 |    101 | content writer    | Germany     |
+|    103 | Subha    | 7823777620 |   NULL | NULL              | NULL        |
+|    104 | Raju     | 9627180028 |    104 | data analyst      | India       |
+|    105 | Priya    | 9837221000 |    105 | software engineer | India       |
+|    106 | Shailja  | 9837221820 |   NULL | NULL              | NULL        |
++--------+----------+------------+--------+-------------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select Employee.emp_name,Employee.emp_no,Employment.emp_profile,Employment.emp_country
+    -> from Employee RIGHT JOIN Employment On Employee.emp_id=Employment.emp_id;
++----------+------------+-------------------+-------------+
+| emp_name | emp_no     | emp_profile       | emp_country |
++----------+------------+-------------------+-------------+
+| Asha     | 8972861254 | content writer    | Germany     |
+| Raju     | 9627180028 | data analyst      | India       |
+| Priya    | 9837221000 | software engineer | India       |
+| NULL     |       NULL | java developer    | Europe      |
+| NULL     |       NULL | marketing manager | Mexico      |
++----------+------------+-------------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select *  from Employee RIGHT JOIN Employment On Employee.emp_id=Employment.emp_id;
++--------+----------+------------+--------+-------------------+-------------+
+| emp_id | emp_name | emp_no     | emp_id | emp_profile       | emp_country |
++--------+----------+------------+--------+-------------------+-------------+
+|    101 | Asha     | 8972861254 |    101 | content writer    | Germany     |
+|    104 | Raju     | 9627180028 |    104 | data analyst      | India       |
+|    105 | Priya    | 9837221000 |    105 | software engineer | India       |
+|   NULL | NULL     |       NULL |    108 | java developer    | Europe      |
+|   NULL | NULL     |       NULL |    109 | marketing manager | Mexico      |
++--------+----------+------------+--------+-------------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Employee CROSS JOIN Employment On Employee.emp_id=Employment.emp_id;
++--------+----------+------------+--------+-------------------+-------------+
+| emp_id | emp_name | emp_no     | emp_id | emp_profile       | emp_country |
++--------+----------+------------+--------+-------------------+-------------+
+|    101 | Asha     | 8972861254 |    101 | content writer    | Germany     |
+|    104 | Raju     | 9627180028 |    104 | data analyst      | India       |
+|    105 | Priya    | 9837221000 |    105 | software engineer | India       |
++--------+----------+------------+--------+-------------------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from Employee CROSS JOIN Employment;
++--------+----------+------------+--------+-------------------+-------------+
+| emp_id | emp_name | emp_no     | emp_id | emp_profile       | emp_country |
++--------+----------+------------+--------+-------------------+-------------+
+|    106 | Shailja  | 9837221820 |    101 | content writer    | Germany     |
+|    105 | Priya    | 9837221000 |    101 | content writer    | Germany     |
+|    104 | Raju     | 9627180028 |    101 | content writer    | Germany     |
+|    103 | Subha    | 7823777620 |    101 | content writer    | Germany     |
+|    101 | Asha     | 8972861254 |    101 | content writer    | Germany     |
+|    106 | Shailja  | 9837221820 |    104 | data analyst      | India       |
+|    105 | Priya    | 9837221000 |    104 | data analyst      | India       |
+|    104 | Raju     | 9627180028 |    104 | data analyst      | India       |
+|    103 | Subha    | 7823777620 |    104 | data analyst      | India       |
+|    101 | Asha     | 8972861254 |    104 | data analyst      | India       |
+|    106 | Shailja  | 9837221820 |    105 | software engineer | India       |
+|    105 | Priya    | 9837221000 |    105 | software engineer | India       |
+|    104 | Raju     | 9627180028 |    105 | software engineer | India       |
+|    103 | Subha    | 7823777620 |    105 | software engineer | India       |
+|    101 | Asha     | 8972861254 |    105 | software engineer | India       |
+|    106 | Shailja  | 9837221820 |    108 | java developer    | Europe      |
+|    105 | Priya    | 9837221000 |    108 | java developer    | Europe      |
+|    104 | Raju     | 9627180028 |    108 | java developer    | Europe      |
+|    103 | Subha    | 7823777620 |    108 | java developer    | Europe      |
+|    101 | Asha     | 8972861254 |    108 | java developer    | Europe      |
+|    106 | Shailja  | 9837221820 |    109 | marketing manager | Mexico      |
+|    105 | Priya    | 9837221000 |    109 | marketing manager | Mexico      |
+|    104 | Raju     | 9627180028 |    109 | marketing manager | Mexico      |
+|    103 | Subha    | 7823777620 |    109 | marketing manager | Mexico      |
+|    101 | Asha     | 8972861254 |    109 | marketing manager | Mexico      |
++--------+----------+------------+--------+-------------------+-------------+
+25 rows in set (0.01 sec)
+
+mysql>
+
