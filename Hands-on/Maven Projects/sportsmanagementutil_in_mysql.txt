@@ -1,0 +1,58 @@
+Enter password: *************
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 24
+Server version: 8.0.31 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use Rajadb;
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_rajadb  |
++-------------------+
+| cricket           |
+| cricket_detail    |
+| employee          |
+| employment        |
+| instructor        |
+| instructor_detail |
+| song              |
+| sport             |
++-------------------+
+8 rows in set (0.08 sec)
+
+mysql> select * from cricket;
++----+------------------+---------------+------------------+-------------------+
+| id | player_name      | hobby         | inspiration      | cricket_detail_id |
++----+------------------+---------------+------------------+-------------------+
+|  1 | Virat Kohli      | WAtching TV   | Ronaldo          |                 1 |
+|  2 | Sachin Tendulkar | Reading books | Amitabh Bachchan |                 2 |
++----+------------------+---------------+------------------+-------------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from cricket_detail;
++----+------------------+---------------+
+| id | cricket_stadium  | cricket_types |
++----+------------------+---------------+
+|  1 | Jawaharlal nehru | World cup     |
+|  2 | Eden Garden      | T20           |
++----+------------------+---------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from cricket inner join cricket_detail where cricket.cricket_detail_id=cricket_detail.id;
++----+------------------+---------------+------------------+-------------------+----+------------------+---------------+
+| id | player_name      | hobby         | inspiration      | cricket_detail_id | id | cricket_stadium  | cricket_types |
++----+------------------+---------------+------------------+-------------------+----+------------------+---------------+
+|  1 | Virat Kohli      | WAtching TV   | Ronaldo          |                 1 |  1 | Jawaharlal nehru | World cup     |
+|  2 | Sachin Tendulkar | Reading books | Amitabh Bachchan |                 2 |  2 | Eden Garden      | T20           |
++----+------------------+---------------+------------------+-------------------+----+------------------+---------------+
+2 rows in set (0.00 sec)
+
+mysql>
